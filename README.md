@@ -11,8 +11,9 @@ This project was completed by Group 8 for the Programming and Data Analysis(ECE1
 1. Clone the repository: ```git clone https://github.com/slickFix/ECE143_Hotel_Recommendation_System.git```
 2. Create new anaconda environment: ```conda create -n ece143 python=3.9```
 3. Change diretory into the ```cd ECE143_Hotel_Recommendation_System```
-4. Execute following command in UNIX terminal: ```pip install -r requirements.txt```
-5. Change directory into the src folder and execute: ```python main.py```
+4. Execute following command in terminal: ```pip install -r requirements.txt```
+5. Change diretory into the src folder: ```cd src```
+5. For running the complete pipeline execute: ```python main.py```
 6. For using the app based recommendation execute: ```python app.py```
 
 # Folder Structure
