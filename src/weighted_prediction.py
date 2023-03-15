@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import datetime
 
-from finalProject.hotel_trending import output_score
-from finalProject.monthly_reccomendation import monthlyTrendyWrapper
-from finalProject.svdpp import trainSVDPP
+from hotel_trending import output_score
+from monthly_reccomendation import monthlyTrendyWrapper
+from svdpp import trainSVDPP
 
 class FinalModel():
     def __init__(self, Hotels: pd.DataFrame, user_booked:pd.DataFrame, df:pd.DataFrame):

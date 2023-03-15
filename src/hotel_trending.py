@@ -19,7 +19,7 @@ def get_history_orders(df: pd.DataFrame, hotelID: int, timespan: int = 3, max_da
     """
     data = df[df['HotelID'] == hotelID]
     assert data.size != 0
-    data = data['WatchDate'].values.tolist()
+    data = data['BookDate'].values.tolist()
     data = [date_type_converter(i) for i in data]
     deltaTime = datetime.timedelta(days=timespan)
     start_day = data[0]

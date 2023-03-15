@@ -3,7 +3,7 @@ import numpy as np
 from datetime import datetime
 import os
 
-from finalProject.util import __convert_int__
+from util import __convert_int__
 
 
 def clean_data(bookings: pd.DataFrame, hotels: pd.DataFrame, hotel_bookings: pd.DataFrame) -> pd.DataFrame:
@@ -12,17 +12,17 @@ def clean_data(bookings: pd.DataFrame, hotels: pd.DataFrame, hotel_bookings: pd.
 
         bookings: Bookings events in terms of the provider and user
         hotels: Metadata regarding hotels
-        hotel_bookings: Booking events in terms of the user and movie
+        hotel_bookings: Booking events in terms of the user and Hotel
 
         Returns: A analysis ready datarame with some added convinience columns
     """
-    assert isinstance(bookings, pd.DataFrame), "watchings_path must be a pd.DataFrame"
-    assert isinstance(hotels, pd.DataFrame), "movies_path must be a pd.DataFrame"
-    assert isinstance(hotel_bookings, pd.DataFrame), "movie_watchings_path must be a pd.DataFrame"
+    assert isinstance(bookings, pd.DataFrame), "Bookings_path must be a pd.DataFrame"
+    assert isinstance(hotels, pd.DataFrame), "Hotels_path must be a pd.DataFrame"
+    assert isinstance(hotel_bookings, pd.DataFrame), "Hotel_Bookings_path must be a pd.DataFrame"
 
-    bookings = bookings.filter(['WatchingID', 'UserID', 'WatchDate', 'ProviderID'], axis=1)
-    hotels = hotels.filter(['MovieID', 'MovieType', 'MovieRank'], axis=1)
-    hotel_bookings = hotel_bookings.filter(['WatchingID', 'ProviderID', 'MovieID', 'WatchDate'], axis=1)
+    bookings = bookings.filter(['BookingID', 'UserID', 'BookDate', 'ProviderID'], axis=1)
+    hotels = hotels.filter(['HotelID', 'HotelType', 'HotelRank'], axis=1)
+    hotel_bookings = hotel_bookings.filter(['BookingID', 'ProviderID', 'HotelID', 'BookDate'], axis=1)
 
     #Merge: hotel_bookings and booking both have information regarding a single booking event
     df1 = pd.merge(bookings, hotel_bookings, on='BookingID').rename(columns={"ProviderID_x": "ProviderID"}).rename(columns={"BookDate_x": "BookDate"}).filter(['BookingID', 'UserID', 'ProviderID', 'HotelID', 'BookDate'], axis=1)
@@ -57,7 +57,7 @@ def get_user_booked(df: pd.DataFrame) -> pd.DataFrame:
     for col in user_booked:
         user_booked[col] = user_booked[col].apply(__convert_int__)
 
-    #Add 1, so if one time watch is then one
+    #Add 1, so if one time Book is then one
     user_booked['Number_Booked_log'] = user_booked['Number_Booked'].apply(np.log) + 1
 
     users_counts = user_booked['UserID'].value_counts().rename('users_counts')

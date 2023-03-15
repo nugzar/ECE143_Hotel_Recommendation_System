@@ -1,8 +1,7 @@
 from data_cleaning import clean_data, get_user_booked
 import pandas as pd
 
-from finalProject.weighted_prediction import FinalModel
-
+from weighted_prediction import FinalModel
 
 ##### DEFINING DATA DIRECTORIES
 BOOKINGS_CSV = '../data/bookings.csv'
@@ -33,6 +32,8 @@ if __name__ == "__main__":
     final = FinalModel(hotels, user_watched, df)
     print("Training model")
     final.train()
+    print()
     print(f"Getting prediction for user: {uid}, with weights: {weights} ")
+    print()
     print(final.predict(2976, (80, 10, 10)))
 
