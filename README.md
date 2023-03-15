@@ -1,1 +1,1 @@
-# ECE143_Hotel_Recommendation_System
+# ECE143_Recommendation_System
