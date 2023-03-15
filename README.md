@@ -1,13 +1,22 @@
 # ECE143_Hotel_Recommendation
 
-This project was completed by Group 8 for the Programming and Data Analysis(ECE143) coursework. The objective of this project is to create a hotel recommendation system which incorporates hotel trends along with general recommendation system and result analysis based on data shared by local hotel booking website. 
+This project was completed by Group 8 for the Programming and Data Analysis(ECE143) coursework. The objective of this project is to create a hotel recommendation system which incorporates hotel trends along with general recommendation system and result analysis based on the data shared by local hotel booking website. 
+
+# Project Files
+
+* Main.py runs the complete pipeline, invoking collaborative filtering based recommendation as well as trend based recommendation
+* App.py provides a workable GUI which allows the user to play around with different weights corresponding to Trend and Collaborative Filtering recommendations.
 
 # Usage Instructions
-1. Clone the repository: git clone https://github.com/slickFix/ECE143_Hotel_Recommendation_System.git
-2. 
+1. Clone the repository: ```git clone https://github.com/slickFix/ECE143_Hotel_Recommendation_System.git```
+2. Create new anaconda environment: ```conda create -n ece143 python=3.9```
+3. Change diretory into the ```cd ECE143_Hotel_Recommendation_System```
+4. Execute following command in UNIX terminal: ```pip install -r requirements.txt```
+5. Change directory into the src folder and execute: ```python main.py```
+6. For using the app based recommendation execute: ```python app.py```
 
 # Folder Structure
-
+```
 ├── data
 │   ├── bookings.csv
 │   ├── combine_df.csv
@@ -30,12 +39,14 @@ This project was completed by Group 8 for the Programming and Data Analysis(ECE1
     ├── svdpp.py
     ├── util.py
     └── weighted_prediction.py
+```
 
-
-# Contributors (order according to course website)
+# Contributors*
 
 * Zura Nebieridze
 * Siddharth Shukla
 * Xiaofeng Zhao
 * Qihuang Chen
 * Aman Gupta
+
+*order according to course website
