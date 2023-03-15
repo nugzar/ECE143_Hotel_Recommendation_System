@@ -6,19 +6,26 @@ from finalProject.data_cleaning import clean_data, get_user_watched
 from finalProject.weighted_prediction import FinalModel
 
 
+
+##### DEFINING DATA DIRECTORIES
+BOOKINGS_CSV = '../data/bookings.csv'
+HOTELS_CSV = '../data/hotels.csv'
+HOTEL_BOOKINGS_CSV = '../data/hotel_bookings.csv'
+
+
 print("Importing data")
-watchings = pd.read_csv('../data/watchings.csv')
-movies = pd.read_csv('../data/movies.csv')
-movie_watchings = pd.read_csv('../data/movie_watchings.csv')
+bookings = pd.read_csv(BOOKINGS_CSV)
+hotels = pd.read_csv(HOTELS_CSV)
+hotel_bookings = pd.read_csv(HOTEL_BOOKINGS_CSV)
 
 print("Cleaning Data, and generating intermediate cleaned data")
-df = clean_data(watchings,movies , movie_watchings)
+df = clean_data(bookings,hotels , hotel_bookings)
 user_watched = get_user_watched(df)
 
 USER_IDS = user_watched["UserID"].unique().tolist()
 DF_DATA = None
 
-final = FinalModel(movies, user_watched, df)
+final = FinalModel(bookings, user_watched, df)
 final.train()
 
 
@@ -30,7 +37,7 @@ def generate_dataframe(uid, weights):
 class RecommenderUI:
     def __init__(self, master):
         self.master = master
-        master.title("Movie Recommender")
+        master.title("Hotel Recommender")
 
         # Initial Slider Values
         self.slider_1_value = 75
