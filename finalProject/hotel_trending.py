@@ -6,6 +6,8 @@ import datetime
 from scipy.stats import norm
 
 
+DATA_DIR = '../data/combine_df.csv'
+
 def get_history_orders(df: pd.DataFrame, hotelID: int, timespan: int = 3, max_days: Union[int, float] = math.inf):
     assert isinstance(df, pd.DataFrame)
     assert isinstance(hotelID, int)
@@ -15,7 +17,7 @@ def get_history_orders(df: pd.DataFrame, hotelID: int, timespan: int = 3, max_da
     count the orders that fall into each timespan days
     (e.g., timespan = 7, we count the orders in each week)
     """
-    data = df[df['MovieID'] == hotelID]
+    data = df[df['HotelID'] == hotelID]
     assert data.size != 0
     data = data['WatchDate'].values.tolist()
     data = [date_type_converter(i) for i in data]
@@ -52,7 +54,7 @@ def date_type_converter(mydatetime: str):
 
 
 def output_score(df, timespan = 30, max_days=math.inf):
-    hotelIDs = list(set(df['MovieID'].values.tolist()))
+    hotelIDs = list(set(df['HotelID'].values.tolist()))
     hotelIDs.sort()
     scores = []
     for hotel in hotelIDs:
@@ -67,11 +69,11 @@ def output_score(df, timespan = 30, max_days=math.inf):
     minScore = min(scores)
     assert maxScore > minScore
     scores = [(i - minScore) / (maxScore - minScore) * 100 for i in scores]
-    return pd.DataFrame({'MovieID': hotelIDs, 'score': scores})
+    return pd.DataFrame({'HotelID': hotelIDs, 'score': scores})
 
 if __name__ == '__main__':
     # read data
-    df = pd.read_csv('../data/df.csv')
+    df = pd.read_csv(DATA_DIR)
     print("The size of the data is:" + str(df.size))
 
     hotelID = 88879

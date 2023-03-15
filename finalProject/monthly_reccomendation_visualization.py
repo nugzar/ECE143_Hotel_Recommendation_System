@@ -4,19 +4,19 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
-from finalProject.monthly_reccomendation import movie_sd_mapping, booking_maps, movie_gt_booking
+from finalProject.monthly_reccomendation import hotel_sd_mapping, booking_maps, hotel_gt_booking
 
 
-def monthTrendyPlot(movies_count):
+def monthTrendyPlot(hotels_count):
     '''plot # of trendy hotels based on month '''
-    assert isinstance(movies_count, list)
-    assert len(movies_count) == 12
-    for i in movies_count:
+    assert isinstance(hotels_count, list)
+    assert len(hotels_count) == 12
+    for i in hotels_count:
         assert isinstance(i, int)
 
     forDrawingData = []
     for i in range(1, 13):
-        for j in range(movies_count[i - 1]):
+        for j in range(hotels_count[i - 1]):
             forDrawingData.append(i)
     # print(forDrawingData)
     fig, ax = plt.subplots()
@@ -31,11 +31,11 @@ def monthTrendyPlot(movies_count):
 
 if __name__ == "__main__":
     df = pd.read_csv("intermediates/df.csv")
-    df2 = df[['MovieID', 'WatchDate']]
+    df2 = df[['hotelID', 'BookDate']]
     month_map = booking_maps(df2)
-    movie_list = movie_gt_booking(df2, 250)
-    movies_count = []
+    hotel_list = hotel_gt_booking(df2, 250)
+    hotels_count = []
     for month in range(1, 12 + 1):
-        mapping = movie_sd_mapping(month_map, movie_list, month, weightEqual=False, sd_diff=1.5)
-        movies_count.append(len(mapping))
-    monthTrendyPlot(movies_count)
+        mapping = hotel_sd_mapping(month_map, hotel_list, month, weightEqual=False, sd_diff=1.5)
+        hotels_count.append(len(mapping))
+    monthTrendyPlot(hotels_count)
