@@ -2,8 +2,8 @@ import random
 import tkinter as tk
 import pandas as pd
 
-from finalProject.data_cleaning import clean_data, get_user_watched
-from finalProject.weighted_prediction import FinalModel
+from data_cleaning import clean_data, get_user_booked
+from weighted_prediction import FinalModel
 
 
 
@@ -20,12 +20,13 @@ hotel_bookings = pd.read_csv(HOTEL_BOOKINGS_CSV)
 
 print("Cleaning Data, and generating intermediate cleaned data")
 df = clean_data(bookings,hotels , hotel_bookings)
-user_watched = get_user_watched(df)
+user_watched = get_user_booked(df)
 
 USER_IDS = user_watched["UserID"].unique().tolist()
 DF_DATA = None
 
-final = FinalModel(bookings, user_watched, df)
+
+final = FinalModel(hotels, user_watched, df)
 final.train()
 
 
