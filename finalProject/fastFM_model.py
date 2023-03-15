@@ -1,36 +1,15 @@
 # # Importing libraries
-
-
 import numpy as np
 import pandas as pd
 import scipy
 
-import sklearn 
-
+import sklearn
 import os
 
 from fastFM import als
 
 
-
-# # Data dictionary
-
-# WatchID - Instance of someone booking a hotel
-
-# UserID - User ID
-
-# ProviderID - Which website/provider they used when booking (Maybe matters, maybe not?)
-
-# MovieID - HotelID
-
-# WatchDate - When the hotel was booked
-
-# MovieType - Hotel Type (By the beach, downtown, idk)
-
-# MovieRank - Hotel Stars (Not by the user, but the actual stars)
-
-data_dir = './data/'
-
+DATA_DIR = '../data/'
 
 
 def RMSE(predictions, labels):
@@ -46,33 +25,31 @@ def RMSE(predictions, labels):
     return sum(differences) / len(differences)
 
 
-def get_data(data_dir):
+def get_data(DATA_DIR):
 
     ''' Gets the training data for the Fast FM model
     '''
+    
+    assert isinstance(DATA_DIR,str)
+    assert os.path.exists(DATA_DIR) , 'Path is not present'
 
-    assert isinstance(data_dir,str)
 
-    assert os.path.exists(data_dir) , 'Path is not present'
-
-
-    csv_files = os.listdir(data_dir)
-
+    csv_files = os.listdir(DATA_DIR)
 
     df_di = {}
 
     for file in csv_files:
-        df_di[file] = pd.read_csv(os.path.join(data_dir,file))
+        df_di[file] = pd.read_csv(os.path.join(DATA_DIR,file))
 
 
-    main_df = df_di['df.csv']
+    main_df = df_di['combine_df.csv']
 
-    main_df = main_df.sort_values('Days_Since_Watched').reset_index(drop = True)
+    main_df = main_df.sort_values('Days_Since_Booked').reset_index(drop = True)
 
-    main_df = main_df.drop('WatchingID',axis= 1)
+    main_df = main_df.drop('BookingID',axis= 1)
 
 
-    main_df = main_df.drop_duplicates(['UserID','MovieID'])
+    main_df = main_df.drop_duplicates(['UserID','HotelID'])
 
     ## adding additional columns for filtering the data
 
@@ -84,27 +61,27 @@ def get_data(data_dir):
     ### users with less than 3 hotel bookings are dropped
     subset_df = users_data[users_data.users_counts >= 3]
 
-    df2 = subset_df['MovieID'].value_counts().rename('df2')
+    df2 = subset_df['HotelID'].value_counts().rename('df2')
     df2_data   = subset_df.merge(df2.to_frame(),
-                                    left_on='MovieID',
+                                    left_on='HotelID',
                                     right_index=True)
 
     ### hotels with less than 5 hotel bookings are dropped
     df2_data = df2_data[df2_data.df2 >= 5]
 
 
-    u_watch_df = df_di['User_Watched.csv']
+    u_watch_df = df_di['user_bookings.csv']
 
 
-    ## combining the datset (user watched and main df TO include recency in terms of Days_Since_Watched column)
-    club_df = pd.merge(u_watch_df,main_df,on=['UserID','MovieID'],how = 'left')
+    ## combining the datset (user watched and main df TO include recency in terms of Days_Since_Booked column)
+    club_df = pd.merge(u_watch_df,main_df,on=['UserID','HotelID'],how = 'left')
 
-    club_df = pd.merge(u_watch_df,main_df,on=['UserID','MovieID'],how = 'left')
+    club_df = pd.merge(u_watch_df,main_df,on=['UserID','HotelID'],how = 'left')
 
 
-    return prepared_data(club_df)
+    return prepare_data(club_df)
 
-def prepared_data(processed_data_frame):
+def prepare_data(processed_data_frame):
     """Uses the processed data set to prepare the data for modelling
 
     Args:
@@ -116,10 +93,10 @@ def prepared_data(processed_data_frame):
 
     data = []
 
-    mi = processed_data_frame['Days_Since_Watched'].min()
-    ma = processed_data_frame['Days_Since_Watched'].max()
+    mi = processed_data_frame['Days_Since_Booked'].min()
+    ma = processed_data_frame['Days_Since_Booked'].max()
 
-    for u_id,h_id,d_sw in zip(processed_data_frame['UserID'],processed_data_frame['MovieID'],processed_data_frame['Days_Since_Watched']):
+    for u_id,h_id,d_sw in zip(processed_data_frame['UserID'],processed_data_frame['HotelID'],processed_data_frame['Days_Since_Booked']):
         scaled_d_sw = int(((d_sw-mi) /(ma-mi))*10)
         
         di = {'u_id':u_id,'h_id':h_id,'day_bin': scaled_d_sw}
@@ -155,7 +132,7 @@ def prepared_data(processed_data_frame):
         X[i,nUsers + nHotels + days] = 1
 
 
-    y = np.array([d for d in processed_data_frame['Number_Watched_log']])
+    y = np.array([d for d in processed_data_frame['Number_Booked_log']])
 
 
     # X.shape[0],X.shape[0]*0.7
@@ -176,7 +153,7 @@ def model_training(X_train, y_train):
 
     '''
 
-    assert len(X_train) == len(y_train), 'Input x and y are of not same len along axis 0'
+    assert X_train.shape[0] == len(y_train), 'Input x and y are of not same len along axis 0'
 
     fm = als.FMRegression(n_iter=1000, init_stdev=0.1, rank=5, l2_reg_w=0.1, l2_reg_V=0.5)
 
@@ -191,15 +168,12 @@ def model_test_set_result(fm,X_test,y_test):
     ''' Prints and returns the rmse value on the test set
     '''
 
-    assert len(X_test) == len(y_test),'Ensure the dimension of the X and y are same along axis 0'
+    assert X_test.shape[0] == len(y_test),'Ensure the dimension of the X and y are same along axis 0'
+    
     y_pred_with_features = fm.predict(X_test)
-
-
 
     rmse_val = RMSE(y_pred_with_features, y_test)
 
-
-    print('rmse is : ',rmse_val)
 
     ### 20% test set
     ## 0.47192768855603473
@@ -209,4 +183,14 @@ def model_test_set_result(fm,X_test,y_test):
     # 0.4605
 
     return rmse_val
+
+
+if __name__ == "__main__":
+
+    ## getting the training and test data
+    X_train,y_train,X_test,y_test = get_data(DATA_DIR)
+
+    fm = model_training(X_train, y_train)
+    
+    print("RMSE  value for test set : ",model_test_set_result(fm,X_test,y_test))
 
