@@ -1,4 +1,4 @@
-﻿,WatchingID,UserID,ProviderID,MovieID,WatchDate,MovieType,MovieRank,Days_Since_Watched,Month
+,BookingID,UserID,ProviderID,HotelID,BookingDate,HotelType,HotelRank,Days_Since_Booked,Month
 0,17556,2591,1,88879,2018-08-11 10:01:20,2,5,1657,8
 1,17557,3101,1,88879,2018-08-13 14:51:16,2,5,1655,8
 2,17598,3101,1,88879,2018-12-20 14:59:32,2,5,1526,12
