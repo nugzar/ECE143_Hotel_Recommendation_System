@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
-from finalProject.monthly_reccomendation import hotel_sd_mapping, booking_maps, hotel_gt_booking
+from monthly_reccomendation import hotel_sd_mapping, booking_maps, hotel_gt_booking
 
 
 def monthTrendyPlot(hotels_count):
