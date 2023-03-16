@@ -41,6 +41,9 @@ This project was completed by Group 8 for the Programming and Data Analysis(ECE1
     └── weighted_prediction.py
 ```
 
+# Jupyter notebook which shows all the visualizations
+ECE143_Hotel_Recommendation_System/eda_jupyter_notebooks/data_analysis.ipynb
+
 # Contributors*
 
 * Zura Nebieridze
