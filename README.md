@@ -36,7 +36,6 @@ This project was completed by Group 8 for the Programming and Data Analysis(ECE1
     ├── __init__.py
     ├── main.py
     ├── monthly_reccomendation.py
-    ├── monthly_reccomendation_visualization.py
     ├── svdpp.py
     ├── util.py
     └── weighted_prediction.py
