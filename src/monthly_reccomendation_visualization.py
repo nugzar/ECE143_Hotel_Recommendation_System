@@ -30,8 +30,8 @@ def monthTrendyPlot(hotels_count):
     plt.show()
 
 if __name__ == "__main__":
-    df = pd.read_csv("intermediates/df.csv")
-    df2 = df[['hotelID', 'BookDate']]
+    df = pd.read_csv("../data/combine_df.csv")
+    df2 = df[['HotelID', 'BookingDate']]
     month_map = booking_maps(df2)
     hotel_list = hotel_gt_booking(df2, 250)
     hotels_count = []
