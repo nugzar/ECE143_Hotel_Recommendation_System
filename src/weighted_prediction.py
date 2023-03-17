@@ -6,6 +6,8 @@ from hotel_trending import output_score
 from monthly_reccomendation import monthlyTrendyWrapper
 from svdpp import trainSVDPP
 
+def normalizeColumn(series: pd.Series):
+    return series/np.max(series)
 class FinalModel():
     def __init__(self, Hotels: pd.DataFrame, user_booked:pd.DataFrame, df:pd.DataFrame):
         assert isinstance(Hotels, pd.DataFrame)
@@ -24,13 +26,9 @@ class FinalModel():
         monthPrediction = monthlyTrendyWrapper(self.dfDF, datetime.datetime.now().month, bookings=250, sd_diff=1.5,
                                                weightEqual=False).rename(
             columns={"ranking": "Monthly_Trending_Prediction"}).set_index("HotelID")
-        monthPrediction["Monthly_Trending_Prediction"] = (monthPrediction["Monthly_Trending_Prediction"] / np.sum(
-            monthPrediction["Monthly_Trending_Prediction"]))
 
         # Get Hotel Trending Prediction
         hotelTrending = output_score(self.dfDF).rename(columns={"score": "Hotel_Trending_Prediction"}).set_index("HotelID")
-        hotelTrending["Hotel_Trending_Prediction"] = (
-                    hotelTrending["Hotel_Trending_Prediction"] / np.sum(hotelTrending["Hotel_Trending_Prediction"]))
 
         Hotels = self.HotelsDF[["HotelID"]].set_index("HotelID")
         self.HotelsAndAllPredictions = Hotels.join(monthPrediction, on="HotelID").join(hotelTrending, on="HotelID").fillna(0)
@@ -45,10 +43,12 @@ class FinalModel():
 
         #Get Collaborative Filtering Prediction
         svdpp_prediction = self.svdpPredictor(uid).set_index("HotelID").rename(columns={"Prediction": "SVDpp_Prediction"})
-        svdpp_prediction["SVDpp_Prediction"] = (
-                    svdpp_prediction["SVDpp_Prediction"] / np.sum(svdpp_prediction["SVDpp_Prediction"]))
 
         total = self.HotelsAndAllPredictions.join(svdpp_prediction, on = "HotelID").fillna(0)
+
+        total["Monthly_Trending_Prediction"] = normalizeColumn(total["Monthly_Trending_Prediction"])
+        total["Hotel_Trending_Prediction"] = normalizeColumn(total["Hotel_Trending_Prediction"])
+        total["SVDpp_Prediction"] = normalizeColumn(total["SVDpp_Prediction"])
 
         collaborativeFilteringWeight, monthlyTrendingWeight, hotelTrendingWeight = weights
 
