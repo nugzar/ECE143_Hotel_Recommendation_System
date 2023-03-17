@@ -28,7 +28,9 @@ This project was completed by Group 8 for the Programming and Data Analysis(ECE1
 ├── eda_jupyter_notebooks
 │   ├── data_analysis.ipynb
 │   └── data_cleaning.ipynb
+├── Presentation.pdf
 ├── README.md
+├── requirements.txt
 └── src
     ├── app.py
     ├── data_cleaning.py
