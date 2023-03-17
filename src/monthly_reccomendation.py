@@ -7,7 +7,7 @@ def hotel_gt_booking(df, booking=250):
     assert isinstance(df, pd.DataFrame)
     assert isinstance(booking, int) and booking > 3
     month_map = dict()
-    for row in df[['HotelID', 'BookingDate']].itertuples():
+    for row in df[['HotelID', 'BookDate']].itertuples():
         ID = row[1]
         date = row[2]
         assert isinstance(ID, int)
@@ -33,7 +33,7 @@ def hotel_le_booking(df, booking=250):
     assert isinstance(df, pd.DataFrame)
     assert isinstance(booking, int) and booking > 3
     month_map = dict()
-    for row in df[['hotelID', 'BookingDate']].itertuples():
+    for row in df[['hotelID', 'BookDate']].itertuples():
         ID = row[1]
         date = row[2]
         assert isinstance(ID, int)
@@ -60,7 +60,7 @@ def booking_maps(df):
     assert isinstance(df, pd.DataFrame)
     month_map = dict()
 
-    for row in df[['HotelID', 'BookingDate']].itertuples():
+    for row in df[['HotelID', 'BookDate']].itertuples():
         ID = row[1]
         date = row[2]
         assert isinstance(ID, int)
@@ -117,7 +117,7 @@ def monthlyTrendyWrapper(df, month,  bookings=250, sd_diff=2.0, weightEqual=Fals
     Return a dataframe that has columns hotelID and ranking.
     hotelID: unique id for that hotel
     Ranking: weighted 1-100, always 100 if weightEqual is True.'''
-    df2 = df[['HotelID', 'BookingDate']]
+    df2 = df[['HotelID', 'BookDate']]
     # assert statements are included in the following functions
     month_map = booking_maps(df2)
     hotel_list = hotel_gt_booking(df2, bookings)
