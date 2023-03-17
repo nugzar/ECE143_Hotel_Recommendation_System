@@ -2,10 +2,11 @@
 
 This project was completed by Group 8 for the Programming and Data Analysis(ECE143) coursework. The objective of this project is to create a hotel recommendation system which incorporates hotel trends along with general recommendation system and result analysis based on the data shared by local hotel booking website. 
 
-# Project Files
+# Main Project Files
 
-* Main.py runs the complete pipeline, invoking collaborative filtering based recommendation as well as trend based recommendation
-* App.py provides a workable GUI which allows the user to play around with different weights corresponding to Trend and Collaborative Filtering recommendations.
+* ```src/main.py``` :runs the complete pipeline, invoking collaborative filtering based recommendation as well as trend based recommendation
+* ```src/app.py``` :provides a workable GUI which allows the user to play around with different weights corresponding to Trend and Collaborative Filtering recommendations.
+* ```eda_jupyter_notebooks/data_analysis.ipynb``` :juyter notebook which shows all the visualisations
 
 # Usage Instructions
 1. Clone the repository: ```git clone https://github.com/slickFix/ECE143_Hotel_Recommendation_System.git```
@@ -26,7 +27,7 @@ This project was completed by Group 8 for the Programming and Data Analysis(ECE1
 │   └── user_bookings.csv
 ├── eda_jupyter_notebooks
 │   ├── data_analysis.ipynb
-│   └── Data_Cleaning.ipynb
+│   └── data_cleaning.ipynb
 ├── README.md
 └── src
     ├── app.py
@@ -40,9 +41,6 @@ This project was completed by Group 8 for the Programming and Data Analysis(ECE1
     ├── util.py
     └── weighted_prediction.py
 ```
-
-# Jupyter notebook which shows all the visualizations
-ECE143_Hotel_Recommendation_System/eda_jupyter_notebooks/data_analysis.ipynb
 
 # Contributors*
 
