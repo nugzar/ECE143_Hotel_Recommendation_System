@@ -99,27 +99,27 @@ class RecommenderUI:
         self.output_table_widget = tk.Label(self.output_frame, text=self.output_table.to_string(index=False))
         self.output_table_widget.pack(fill=tk.BOTH, expand=True)
 
-    def update_sliders(self, *_):
-        # Get the current slider values
-        slider_1_value = self.slider_1.get()
-        slider_2_value = self.slider_2.get()
-        slider_3_value = self.slider_3.get()
+    def update_sliders(self, activeValue):
+        total = 100
+        active_value = int(activeValue)
+        sliders = [self.slider_1, self.slider_2, self.slider_3]
+        current_values = [slider.get() for slider in sliders]
 
-        # Calculate the total and adjust the sliders if necessary
-        total = slider_1_value + slider_2_value + slider_3_value
-        if total != 100:
-            excess = total - 100
-            if slider_1_value > excess:
-                self.slider_1.set(slider_1_value - excess)
-            elif slider_2_value > excess:
-                self.slider_2.set(slider_2_value - excess)
-            else:
-                self.slider_3.set(slider_3_value - excess)
+        if sum(current_values) == total:
+            return
 
-                # Update the slider values
-            self.slider_1_value = self.slider_1.get()
-            self.slider_2_value = self.slider_2.get()
-            self.slider_3_value = self.slider_3.get()
+        active_slider = -1
+        try:
+            active_slider = current_values.index(active_value)
+        except ValueError:
+            active_slider = 0
+
+        inactive_slider_indices = {0, 1, 2} - {active_slider}
+        remaining_total = total - active_value
+        total_inactive = sum([current_values[i] for i in inactive_slider_indices])
+        for slider_index in inactive_slider_indices:
+            sliders[slider_index].set(round((remaining_total * current_values[slider_index]) / total_inactive))
+        self.slider_1_value, self.slider_2_value, self.slider_3_value = (slider.get() for slider in sliders)
 
     def validate_user_id(self):
         user_id_str = self.user_id_entry.get()
